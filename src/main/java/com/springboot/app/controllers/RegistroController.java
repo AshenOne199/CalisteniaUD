@@ -3,6 +3,7 @@ package com.springboot.app.controllers;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,15 +13,15 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.springboot.app.models.dao.IClienteDao;
 import com.springboot.app.models.entity.Cliente;
-import com.springboot.app.models.service.IClienteService;
 
 @Controller
 @SessionAttributes("cliente")
 public class RegistroController {
 
 	@Autowired
-	private IClienteService clienteService;
+	private IClienteDao clienteDao;
 	
 	//Ir a vista formRegistro y enviar los campos del cliente para registrarlo
 	@GetMapping("/formRegistro")
@@ -39,10 +40,13 @@ public class RegistroController {
 				model.addAttribute("titulo", "Formulario de registro");
 				return "formRegistro";
 			}
+			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		    String encodedPassword = passwordEncoder.encode(cliente.getPassword());
+		    cliente.setPassword(encodedPassword);
 			
-			clienteService.save(cliente);
+			clienteDao.save(cliente);
 			status.setComplete();
 			flash.addFlashAttribute("success", "Cliente registrado con exito!");
-			return "redirect:index";
+			return "redirect:login";
 		}
 }

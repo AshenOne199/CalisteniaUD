@@ -57,18 +57,13 @@
 
     <div class="container my-5">
 
-        <footer class="footer bg-light text-center" th:fragment="footer">
-            <div class="container p-4">
+        <footer class="footer bg-light text-center fixed-bottom" th:fragment="footer">
+            <div class="container p-2">
               <section class="mb-4">
-                <a class="btn btn-outline-dark m-1" href="#!" role="button"
+                <a class="btn btn-outline-dark" href="#!" role="button"
                   ><i class="bi bi-github"></i></i
                 ></a>
               </section>
-                <div class="row d-flex justify-content-center">
-                  <div class="col-lg-6">
-                      <img th:src="@{/images/logo.png}" alt="Logo Calistenia UD" width="100" height="100">
-                  </div>
-                </div>
             </div>
             <p sec:authorize="isAuthenticated()">
               Usuario logeado: <span sec:authentication="name"></span> | Roles: <span sec:authentication="principal.authorities"></span>

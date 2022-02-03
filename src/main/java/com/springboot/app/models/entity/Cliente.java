@@ -31,9 +31,6 @@ public class Cliente implements Serializable{
 	@NotEmpty
 	private String apellido;
 	
-	@NotEmpty
-	private String usuario;
-	
 	@Email
 	@NotEmpty
 	private String email;
@@ -78,15 +75,6 @@ public class Cliente implements Serializable{
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	
-	public String getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(String usuario) {
-		this.usuario = usuario;
 	}
 
 	public String getPassword() {

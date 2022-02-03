@@ -15,7 +15,7 @@
                     <form th:action="@{/login}" method="post">
             
                       <div class="form-outline mb-4">
-                        <input type="text" class="form-control form-control-lg" placeholder="Usuario" name="username" id="username" required autofocus/>
+                        <input type="text" class="form-control form-control-lg" placeholder="Email" name="email" id="email" required autofocus/>
                       </div>
       
                       <div class="form-outline mb-4">
@@ -26,7 +26,7 @@
                         <button type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Iniciar Sesión</button>
                       </div>
       
-                      <p class="text-center text-muted mt-5 mb-0">Aún no tienes una cuenta? <a th:href="@{/formIniciaSesion}" class="fw-bold text-body"><u>Registrate aquí</u></a></p>
+                      <p class="text-center text-muted mt-5 mb-0">Aún no tienes una cuenta? <a th:href="@{/formRegistro}" class="fw-bold text-body"><u>Registrate aquí</u></a></p>
                       <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                     </form>
       

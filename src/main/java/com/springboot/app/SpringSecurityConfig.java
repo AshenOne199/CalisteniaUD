@@ -1,54 +1,63 @@
 package com.springboot.app;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.User.UserBuilder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.springboot.app.auth.handler.LoginSuccessHandler;
+import com.springboot.app.models.service.DetallesClientesServiceImpl;
 //Valida a que vistas se tiene acceso como usuario no registrado y en caso de entrar a una vista no valida lo redirige al login
 @EnableGlobalMethodSecurity(securedEnabled = true)
 @Configuration
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
-
+     
 	@Autowired
-	private LoginSuccessHandler successHandler;
+	private LoginSuccessHandler loginSuccessHandler;
 	
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
-
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/", "/index", "/css/**", "/images/**", "/formRegistro").permitAll()
-		//.antMatchers("/formExamen/**").hasAnyRole("USER")
-		.anyRequest().authenticated()
-		.and()
-		.formLogin()
-		.successHandler(successHandler)
-		.loginPage("/login")
-		.permitAll()
-		.and()
-		.logout().permitAll();
-
-
-	}
-
-	@Autowired
-	public void configurerGlobal(AuthenticationManagerBuilder builder) throws Exception {
-
-		  PasswordEncoder encoder = this.passwordEncoder; UserBuilder users =
-		  User.builder().passwordEncoder(encoder::encode);
-		  
-		  builder.inMemoryAuthentication()
-		  .withUser(users.username("admin").password("123").roles("ADMIN", "USER"))
-		  .withUser(users.username("andres").password("123").roles("USER"));
-		 
-	}
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return new DetallesClientesServiceImpl();
+    }
+     
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+     
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder());
+         
+        return authProvider;
+    }
+ 
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authenticationProvider());
+    }
+ 
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+        .antMatchers("/formExamen").authenticated()
+        .anyRequest().permitAll()
+        .and()
+        .formLogin()
+	        .successHandler(loginSuccessHandler)
+	    	.loginPage("/login")
+            .usernameParameter("email")
+            .permitAll()
+        .and()
+        .logout().logoutSuccessUrl("/").permitAll();
+    }
 
 }
