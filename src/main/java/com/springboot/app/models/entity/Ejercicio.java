@@ -26,6 +26,10 @@ public class Ejercicio implements Serializable{
 	
 	private Integer series;
 
+	public Ejercicio() {
+
+	}
+	
 	public Long getId() {
 		return id;
 	}

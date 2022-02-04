@@ -43,12 +43,23 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider());
+        
+        
     }
  
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+    	
+    	String[] staticResources  =  {
+                "/css/**",
+                "/images/**",
+                "/fonts/**",
+                "/scripts/**",
+            };
+    	
         http.authorizeRequests()
         .antMatchers("/formExamen").authenticated()
+        .antMatchers(staticResources).permitAll()
         .anyRequest().permitAll()
         .and()
         .formLogin()

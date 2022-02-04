@@ -21,5 +21,7 @@ public class DetallesClientesServiceImpl implements UserDetailsService {
         }
         return new DetallesClienteImpl(cliente);
     }
+    
+    
 
 }

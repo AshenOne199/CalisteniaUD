@@ -7,12 +7,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
+import com.springboot.app.models.entity.Cliente;
 import com.springboot.app.models.entity.Examen;
+import com.springboot.app.models.service.ClienteServiceImpl;
 import com.springboot.app.models.service.IExamenService;
 
 @Controller
@@ -22,17 +24,22 @@ public class ExamenController {
 	@Autowired
 	private IExamenService examenService;
 	
-	//Mapeo vista principal: index
-	@GetMapping({"/", "", "/index"})
-	public String index(Model model) {
-		model.addAttribute("titulo", "Bienvendo a Calistenia UD");
-		return "index";
-	}
+	@Autowired
+	private ClienteServiceImpl clienteService;
 	
 	//Ir a vista formExamen y enviar los campos del examen
-	@GetMapping("/formExamen")
-	public String irExamen(Model model) {
+	@GetMapping("/formExamen/{clienteId}")
+	public String irExamen(@PathVariable(value = "clienteId")Long clienteId, Model model, RedirectAttributes flash) {
+		
+		
+		Cliente cliente = clienteService.findOne(clienteId);
+		if(cliente == null) {
+			flash.addFlashAttribute("error", "El cliente no existe");
+			return "redirect:/index";
+		}
+		
 		Examen examen = new Examen();
+		examen.setCliente(cliente);
 		model.addAttribute("examen", examen);
 		model.addAttribute("titulo", "Examen de clasificación");
 		return "formExamen";
@@ -46,7 +53,6 @@ public class ExamenController {
 			model.addAttribute("titulo", "Examen de clasificación");
 			return "formExamen";
 		}
-		
 		examenService.save(examen);
 		status.setComplete();
 		flash.addFlashAttribute("success", "Examen respondido con exito!");
