@@ -8,6 +8,6 @@ import com.springboot.app.models.entity.Cliente;
 //Interfaz que hereda la clase para hacer consultas y paginacion a la base de datos de la entidad Cliente
 @Repository
 public interface IClienteDao extends JpaRepository<Cliente, Long>{
-	@Query("SELECT c FROM Cliente c WHERE c.email = ?1")
+	@Query("SELECT * FROM Cliente c WHERE c.email = ?1")
 	Cliente findByEmail(String email);
 }

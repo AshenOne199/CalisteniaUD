@@ -15,10 +15,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 //Clase que modela al cliente
 @Entity
 @Table(name = "clientes")
-public class Cliente implements Serializable{
+public class Cliente implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -28,25 +30,28 @@ public class Cliente implements Serializable{
 
 	@NotEmpty
 	private String nombre;
-	
+
 	@NotEmpty
 	private String apellido;
-	
+
 	@Email
 	@NotEmpty
 	@Column(unique = true)
 	private String email;
-	
+
 	@NotEmpty
 	private String password;
 
+	@NotNull
+	private Long nivel;
+
 	@OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Examen> examenes;
-	
+
 	public Cliente() {
 		examenes = new ArrayList<Examen>();
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -94,11 +99,17 @@ public class Cliente implements Serializable{
 	public void setExamenes(List<Examen> examenes) {
 		this.examenes = examenes;
 	}
-	
+
 	public void addExamen(Examen examen) {
 		examenes.add(examen);
 	}
-	
-	
-	
+
+	public Long getNivel() {
+		return nivel;
+	}
+
+	public void setNivel(Long nivel) {
+		this.nivel = nivel;
+	}
+
 }
