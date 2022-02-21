@@ -1,0 +1,1 @@
+document.getElementById('btnRutina').disabled=true;

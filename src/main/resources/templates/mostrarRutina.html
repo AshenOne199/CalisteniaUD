@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es" class="h-100" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <head th:replace="layout/layout :: head"></head>
+  <body>
+    <header th:replace="layout/layout :: header"></header>
+    <div class="container vh-100 justify-content-center text-center">
+
+					<div th:each="rutina : ${rutinaFinal}">
+            <div class="card-group m-2">
+              <div class="card">
+                <img src="..." class="card-img-top" alt="..." th:text="${rutina.video}">
+                <div class="card-body">
+                  <h5 class="card-title" th:text="${rutina.nombre}"></h5>
+                <p class="card-text" th:text="${rutina.descripcion}"></p>
+              </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item" th:text="${rutina.repeticiones}"></li>
+                <li class="list-group-item" th:text="${rutina.modalidad}"></li>
+                <li class="list-group-item" th:text="${rutina.series}"></li>
+              </ul>
+                </div>
+              </div>
+            </div>
+					</div>
+          
+    </div>
+    <footer th:replace="layout/layout :: footer"></footer>
+  </body>
+</html>
