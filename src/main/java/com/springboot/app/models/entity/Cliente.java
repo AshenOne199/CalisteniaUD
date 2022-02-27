@@ -1,17 +1,12 @@
 package com.springboot.app.models.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -39,13 +34,9 @@ public class Cliente implements Serializable{
 	
 	@NotEmpty
 	private String password;
-
-	@OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Examen> examenes;
 	
-	public Cliente() {
-		examenes = new ArrayList<Examen>();
-	}
+	@Column(columnDefinition="tinyint(1) default 0")
+	private int nivel;
 	
 	public Long getId() {
 		return id;
@@ -87,18 +78,14 @@ public class Cliente implements Serializable{
 		this.password = password;
 	}
 
-	public List<Examen> getExamenes() {
-		return examenes;
+	public int getNivel() {
+		return nivel;
 	}
 
-	public void setExamenes(List<Examen> examenes) {
-		this.examenes = examenes;
+	public void setNivel(int nivel) {
+		this.nivel = nivel;
 	}
-	
-	public void addExamen(Examen examen) {
-		examenes.add(examen);
-	}
-	
+
 	
 	
 }

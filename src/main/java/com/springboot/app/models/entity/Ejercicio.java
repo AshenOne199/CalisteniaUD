@@ -1,41 +1,15 @@
 package com.springboot.app.models.entity;
 
-import java.io.Serializable;
+public class Ejercicio {
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-//Clase que modela al los ejercicios que puede ofrecer a partir de un examen
-@Entity
-@Table(name = "ejercicios")
-public class Ejercicio implements Serializable{
-
-	private static final long serialVersionUID = 1L;
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
 	private String nombre;
-	
 	private String descripcion;
-	
-	private Integer repeticiones;
-	
-	private Integer series;
+	private String video;
+	private String repeticiones;
+	private String modalidad;
+	private int series;
 
 	public Ejercicio() {
-
-	}
-	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getNombre() {
@@ -54,21 +28,36 @@ public class Ejercicio implements Serializable{
 		this.descripcion = descripcion;
 	}
 
-	public Integer getRepeticiones() {
+	public String getVideo() {
+		return video;
+	}
+
+	public void setVideo(String video) {
+		this.video = video;
+	}
+
+	public String getRepeticiones() {
 		return repeticiones;
 	}
 
-	public void setRepeticiones(Integer repeticiones) {
+	public void setRepeticiones(String repeticiones) {
 		this.repeticiones = repeticiones;
 	}
 
-	public Integer getSeries() {
+	public String getModalidad() {
+		return modalidad;
+	}
+
+	public void setModalidad(String modalidad) {
+		this.modalidad = modalidad;
+	}
+
+	public int getSeries() {
 		return series;
 	}
 
-	public void setSeries(Integer series) {
+	public void setSeries(int series) {
 		this.series = series;
 	}
-	
-	
+
 }

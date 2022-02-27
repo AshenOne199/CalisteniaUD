@@ -12,14 +12,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.springboot.app.logic.rutrinaFactory.RutinaEspecifica;
-import com.springboot.app.logic.rutrinaFactory.RutinaFactory;
-import com.springboot.app.logic.rutrinaFactory.examen.RutinaExamen;
-import com.springboot.app.logic.rutrinaFactory.rutina.RutinaDiaria;
-import com.springboot.app.models.dao.IClienteDao;
+import com.springboot.app.logic.rutinaFactory.RutinaEspecifica;
+import com.springboot.app.logic.rutinaFactory.RutinaFactory;
+import com.springboot.app.logic.rutinaFactory.examen.RutinaExamen;
+import com.springboot.app.logic.rutinaFactory.rutina.RutinaDiaria;
 import com.springboot.app.models.entity.Cliente;
 import com.springboot.app.models.entity.Ejercicio;
+import com.springboot.app.repository.IClienteDao;
 
 @Controller
 @SessionAttributes("cliente")
@@ -29,26 +30,37 @@ public class RutinaController {
 	private IClienteDao clienteDao;
 
 	@GetMapping("/mostrarExamen")
-	public String verExamen(Model model, Cliente cliente, Principal principal) {
+	public String verExamen(Model model, Cliente cliente, Principal principal, RedirectAttributes flash) {
+		
 		model.addAttribute("titulo", "Examen de clasificación");
 		
 		RutinaFactory rutinaExamen = new RutinaExamen(); 
 		cliente = clienteDao.findByEmail(principal.getName());
-		RutinaEspecifica rutinaEspecifica = rutinaExamen.crearRutinaEspecifica(cliente.getNivel());
 		
-		ArrayList<Ejercicio> rutinaFinal = rutinaEspecifica.getRutina();
+		if(cliente.getNivel() == 8) {
+			RutinaEspecifica rutinaEspecifica = rutinaExamen.crearRutinaEspecifica(cliente.getNivel());
+			ArrayList<Ejercicio> rutinaFinal = rutinaEspecifica.getRutina();
+			flash.addFlashAttribute("info", "Felicidades ya ha completado todos los examenes de calistenia");
+			model.addAttribute("rutinaFinal", rutinaFinal);
+		}else {
+			RutinaEspecifica rutinaEspecifica = rutinaExamen.crearRutinaEspecifica(cliente.getNivel()+1);
+			ArrayList<Ejercicio> rutinaFinal = rutinaEspecifica.getRutina();
+			model.addAttribute("rutinaFinal", rutinaFinal);
+		}
+		
 		model.addAttribute("cliente", cliente);
-		model.addAttribute("rutinaFinal", rutinaFinal);
 		
 		return "mostrarExamen";
 	}
 	
 	@PostMapping("/formRutinaExamenSiguiente")
-	public String subirNivel(@Valid Cliente cliente, SessionStatus status) {
-		cliente.setNivel(cliente.getNivel() + 1);
-		clienteDao.save(cliente);
-		status.setComplete();
-		return "redirect:mostrarExamen";
+	public String subirNivel(@Valid Cliente cliente, SessionStatus status, RedirectAttributes flash) {
+
+			cliente.setNivel(cliente.getNivel() + 1);
+			clienteDao.save(cliente);
+			status.setComplete();
+		
+		return "redirect:index";
 	}
 	
 	@PostMapping("/formRutinaExamenSeleccionar")

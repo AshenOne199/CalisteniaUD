@@ -24,11 +24,11 @@
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" th:href="@{/index}">Home</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Rutina</a>
+              <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a class="nav-link" th:href="@{/mostrarRutina}">Rutina</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Examen</a>
+              <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a class="nav-link" th:href="@{/mostrarExamen}">Examen</a>
               </li>
             </ul>
             <div class="d-flex align-items-center">

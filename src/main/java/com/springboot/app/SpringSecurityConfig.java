@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.springboot.app.auth.handler.LoginSuccessHandler;
-import com.springboot.app.models.service.DetallesClientesServiceImpl;
+import com.springboot.app.services.DetallesClientesServiceImpl;
 //Valida a que vistas se tiene acceso como usuario no registrado y en caso de entrar a una vista no valida lo redirige al login
 @EnableGlobalMethodSecurity(securedEnabled = true)
 @Configuration
